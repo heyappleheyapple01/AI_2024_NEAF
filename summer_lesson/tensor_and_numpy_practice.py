@@ -3,8 +3,8 @@ import torch ## The function of torch is the same as numpy, but it can run on GP
 
 ## first part : convert data type
 np_data = np.arange(6).reshape((2, 3)) 
-"""
-your code
-"""
+torch_data = torch.from_numpy(np_data)
+print(f"Tensor :\n{torch_data}")
+tensor2array = torch_data.numpy()
 
 ## second part : some basic usage

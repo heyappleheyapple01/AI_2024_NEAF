@@ -17,9 +17,11 @@ y = torch.cat((y0, y1), ).type(torch.LongTensor)    # torch.Size([200])
 class Net(torch.nn.Module): # class a Network and input a torch module
     def __init__(self, n_feature, n_output):
         super(Net, self).__init__() # To inherit things from Net, the standard process must be added
-
+        self.hidden = torch.nn.Linear(n_feature, 10)  # hidden layer
+        self.out = torch.nn.Linear(10, n_output)      # output layer
     def forward(self, x):
-        
+        x = F.relu(self.hidden(x))   # activation function for hidden layer
+        x = self.out(x)              # output layer
         return x 
 
 net = Net(n_feature=2, n_output=2) # define the network
@@ -33,6 +35,12 @@ plt.ion()
 
 for t in range(100):
     
+    out = net(x)                             # input x and predict based on x
+    loss = loss_func(out, y)                 # compute the loss between prediction and true values
+
+    optimizer.zero_grad()                    # clear gradients for next train
+    loss.backward()                          # backpropagation, compute gradients
+    optimizer.step()                         # apply gradients
     
     if t % 5 == 0:
         plt.cla()

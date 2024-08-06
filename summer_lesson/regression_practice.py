@@ -12,8 +12,12 @@ class Net(torch.nn.Module): # class a Network and input a torch module
     def __init__(self, n_feature, n_hidden, n_output):
         super(Net, self).__init__() # To inherit things from Net, the standard process must be added
 
+        self.hidden = torch.nn.Linear(n_feature, n_hidden)
+        self.predict = torch.nn.Linear(n_hidden, n_output)
+
     def forward(self, x):
-        
+        x = F.relu(self.hidden(x))
+        x = self.predict(x)
         return x 
     
 net = Net(n_feature=1, n_hidden=10, n_output=1) 
@@ -26,6 +30,12 @@ plt.ion() # something about plotting
 
 for t in range(200):
     
+    prediction = net(x)
+    loss = loss_func(prediction, y)
+
+    optimizer.zero_grad()
+    loss.backward()
+    optimizer.step()
 
     if t % 5 == 0: 
         plt.cla()
